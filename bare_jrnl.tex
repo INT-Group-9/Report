@@ -430,12 +430,6 @@ The abstract goes here.
 \end{abstract}
 
 
-
-
-
-
-
-
 % For peer review papers, you can put extra information on the cover
 % page as needed:
 % \ifCLASSOPTIONpeerreview
@@ -464,35 +458,27 @@ The abstract goes here.
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-for IEEE journal papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
+\IEEEPARstart{T}{he} task we set out to complete was to create a convolutional neural network that could perform image classification on 2D images. The network must be trained using the CIFAR-10 dataset and must take no longer than 24 hours to train.
+
+In 1989, Yan LeCun proposed one of the earliest convolutional neural networks, the LeNet. Inspired by LeCun’s CNN design, computer scientist Alex Krizhevsky and his collaborators designed the CNN architecture, AlexNet, which is now regarded as a “leading architecture for any object-detection task”. This is due to the new techniques to CNN architecture that AlexNet introduced, some of which being: using ReLU instead of the Tanh function (which was the standard of the time), overlapping the ‘pools’ of outputs of neighbouring groups of neurons and training the model using multiple GPUs. 
+
+Image classification is an important machine learning problem, as developments in the field could lead to advancements in many technologies. One of which being, driverless car technology, as accurately identifying different objects on the road is crucial for ensuring a safe journey.
+
 
 \hfill mds
  
 \hfill August 26, 2015
 
-\subsection{Subsection Heading Here}
-Subsection text here.
 
-\subsection{Test}
-Seeing if I can contribute
 
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
+\section{Method}
 
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+\section{Network Architecture} 
 
-\section{METHOD}
-Github is my jam
+\section{Results and Evaluation}
 
-\section{NETWORK ARCHITECTURE} 
-
-\section{RESULTS AND EVALUATION}
+\section{Conclusion and Further Work}
+We found our model achieved good performance, with 86\% accuracy over 20 epochs, 89\% accuracy over 80 epochs, and 91\% accuracy when given 1000 epochs. As a result we believe that our architecture is a good choice - it is capable of good performance, but can still be further improved. We were able to create a good model rather quickly using the Adam optimiser, however we struggled to improve our model until reverting to SGD. After returning to SGD we were able to improve our model. We had attempted to make use of a scheduler to adjust the learning rate, however after encountering some trouble opted not to. In the future we would like to correctly implement the use of a scheduler to take advantage of the benefits of changing the learning rate. We would also like to look into use of the AdaBound optimiser, which claims to have the benefits of both SGD and Adam, as this could help us improve our model further.
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -588,16 +574,6 @@ Github is my jam
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
-
-
-
-\section{Conclusion and Further Work}
-We found our model achieved good performance, with 86\% accuracy over 20 epochs, 89\% accuracy over 80 epochs, and XX\% accuracy when given XX epochs over XX hours.  As a result we believe that our architecture is a good choice - it is capable of good performance, but can still be further improved.  We were able to create a good model rather quickly using the Adam optimiser, however we struggled to improve our model until reverting to SGD.  After returning to SGD we were able to improve our model.  We had attempted to make use of a scheduler to adjust the learning rate, however after encountering some trouble opted not to.  In the future we would like to correctly implement the use of a scheduler to take advantage of the benefits of changing the learning rate.  We would also like to look into use of the AdaBound optimiser, which claims to have the benefits of both SGD and Adam, as this could help us improve our model further.
-
-
-
-
-
 % if have a single appendix:
 %\appendix[Proof of the Zonklar Equations]
 % or
@@ -612,8 +588,6 @@ We found our model achieved good performance, with 86\% accuracy over 20 epochs,
 % starts a section numbered zero.)
 %
 
-
-.
 
 
 % Can use something like this to put references on a page
