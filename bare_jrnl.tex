@@ -122,7 +122,7 @@
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
+  \usepackage{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
   % and their extensions so you won't have to specify these with
@@ -439,7 +439,7 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-The abstract goes here.
+placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder placeholder 
 \end{abstract}
 
 
@@ -503,7 +503,21 @@ The loss for each prediction is calculated using the  Cross Entropy Loss functio
 Where g is the prediction and y is the correct label. This loss is calculated and the necessary adjustments to the weights are propagated backwards and average over the training set. This resulting vector of averaged adjustments to each weight is proportional to the negative gradient of the cost function \cite{3b1b}. This information is then used to calculate the minimum cost using Stochastic Gradient Descent as the optimiser. This is used instead of Gradient Descent as it can be performed over mini-batches to reduce computation time. Furthermore, it arguably leads to a more accurate model when performed over enough epochs when compared to its alternatives \cite{cifar10}.
 
 
-\begin{table}[]
+\section{Network Architecture} 
+Our network architecture is shown in Figure~\ref{diagram}
+\begin{figure}[!h]
+  \centering
+  %\includesvg{Network_Diagram.svg}
+  \includesvg[width=200pt]{Network_Diagram.svg}
+  \caption{Network Architecture Diagram}
+  \label{diagram}
+\end{figure}
+
+
+\section{Results and Evaluation}
+By training our neural network over 7000 epochs (running the program for 17 hours), we managed to produce a 8.51\% test error for the given dataset, which our team decided was satisfactory. Running the code for about 2.5 hours (1000 epochs) produced a test error of 8.65 and an additional 6000 epochs only managed to improve the value by 0.15\%, which leads us to believe that we have reached a plateau value and running the code for longer without additional changes will not help improve accuracy much. The classification test error was calculated by checking the percentage of incorrect guesses from all 10000 test images of the dataset.
+
+\begin{table}[!h]
 \centering
 \caption{Table of Parameters}
 \label{table:1}
@@ -527,18 +541,6 @@ Linear 2      & 1024 & 512  &                              \\
 Linear 3      & 512  & 10   &                              \\ \bottomrule
 \end{tabular}
 \end{table}
-
-\section{Network Architecture} 
-\begin{figure}[htbp]
-  \centering
-  %\includesvg{Network_Diagram.svg}
-  \includesvg[width=100pt]{Network_Diagram.svg}
-  \caption{Network Architecture Diagram}
-\end{figure}
-\section{Results and Evaluation}
-By training our neural network over 7000 epochs (running the program for 17 hours), we managed to produce a 8.51\% test error for the given dataset, which our team decided was satisfactory. Running the code for about 2.5 hours (1000 epochs) produced a test error of 8.65 and an additional 6000 epochs only managed to improve the value by 0.15\%, which leads us to believe that we have reached a plateau value and running the code for longer without additional changes will not help improve accuracy much. The classification test error was calculated by checking the percentage of incorrect guesses from all 10000 test images of the dataset.
-
-(Maybe a table of different results for different epochs and how long they took to run if someone wants to do this in latex idk)
 
 Our main evaluation metric was said test error, as that gave us an easy way to see the impact of changes. Due to the large amount of data, the value should be pretty reliable, producing only small fluctuations between executions of the same code. We also paid some attention to the loss value and how much it decreased with each epoch. 
 
