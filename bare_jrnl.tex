@@ -40,7 +40,7 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-Our task was to train a machine learning model to classify images into predefined categories. The model is a neural network classifier, and has been trained and tested on the CIFAR-10 dataset. To implement our model into Python we used PyTorch 1.8 and after running our model at 7000 epochs we achieved an accuracy of 91.49\%.
+Our task was to train a machine learning model to classify images into predefined categories. The model is a neural network classifier, and has been trained and tested on the CIFAR-10 dataset. To implement our model into Python we used PyTorch 1.8 and after running our model at 7000 epochs we achieved a test error of only 8.51\%.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -49,9 +49,9 @@ Our task was to train a machine learning model to classify images into predefine
 
 \IEEEPARstart{O}{ur} task was to create a convolutional neural network that could perform image classification on 2D images. The network must be trained using the CIFAR-10 dataset and must take no longer than 24 hours to train.
 
-In 1989, Yann LeCun proposed one of the earliest convolutional neural networks, the LeNet \cite{LeCun1989}. Inspired by LeCun’s CNN design, computer scientist Alex Krizhevsky and his collaborators designed the CNN architecture, AlexNet \cite{AlexNetArticle}. This is now regarded as a leading architecture for any object-detection task due to the new techniques that AlexNet introduced: using ReLU instead of the Tanh function (the then standard), overlapping the ‘pools’ of outputs of neighbouring groups of neurons, and training the model using multiple GPUs \cite{tdsAlexNet}. 
+In 1989, Yann LeCun proposed one of the earliest convolutional neural networks, the LeNet \cite{LeCun1989}. Inspired by LeCun’s CNN design, computer scientist Alex Krizhevsky and his collaborators designed the CNN architecture, AlexNet \cite{AlexNetArticle}. This is now regarded as a leading architecture for any object-detection task due to the new techniques that AlexNet introduced: using ReLU instead of the Tanh function (the standard at the time), overlapping the ‘pools’ of outputs of neighbouring groups of neurons, and training the model using multiple GPUs \cite{tdsAlexNet}. 
 
-Image classification is an important machine learning problem, as innovations here can lead to advancements in many technologies, driverless car technology, as accurately identifying different objects on the road is crucial for ensuring a safe journey \cite{ImageRecognitionApp}.
+Image classification is an important machine learning problem, as innovations here can lead to advancements in many technologies, for example, driverless car technology, as accurately identifying different objects on the road is crucial for ensuring a safe journey \cite{ImageRecognitionApp}.
 
 \section{Method}
 Our architecture begins with data augmentation, utilising the RandomHorizontalFlip and RandomCrop transformations on the 64 images in each batch. This increases the data available for the model to train on \cite{dataAug}; a cat facing towards the right is distinct to a cat facing towards the left. This is because the convolutional neural network uses 3x3 filters to detect distinct features such as left or right edges of various lengths.
@@ -60,40 +60,36 @@ The network includes six convolutional layers, combining low level features such
 
 Next, a Max-Pooling function is applied to the output ‘feature map’ three times in the network. This extracts important learned features from the convolutional layers and returns a smaller feature map with only the features and their relation to one another, it is not concerned with the object's position and thus can better generalise to other data. This information is flattened with Tensor.view() then passed forward.
 
-The network also includes three Batch Normalisations that negate the effect of internal covariate shift, standardising the outputs of the previous layers into a Gaussian distribution \cite{ioffe2015batch}. This stabilises the inputs for each layer during training - their distribution would otherwise fluctuate, which would lead to a higher overfitting error. Dropouts help generalise the data, randomly zeroing neurons to reduce other neurons' dependence on them.
+The network also includes three Batch Normalisations that negate the effect of internal covariate shift, standardising the outputs of the previous layers into a Gaussian distribution \cite{ioffe2015batch}. This stabilises the inputs for each layer during training - their distribution would otherwise fluctuate, which would lead to a higher overfitting error. Dropouts also help generalise the data, randomly zeroing neurons to reduce other neurons' dependence on them.
 
-Finally, three fully-connected (linear) layers map their neurons to activations from previous layers, combining the features learnt in those layers to classify images in the last fully-connected layer \cite{matlab}, with output dimensions (1 x 10) from the input dimensions (32 x 32 x 3). This means that from the 32x32 training images with 3 channels (RGB), a final layer has been produced with a number of neurons equal to the number of possible classes. Each neuron in that layer is computed as the weighted sum of the previous neurons plus an additional bias to denote how likely a neuron is to be active (this is computed at each fully-connected layer):
+\begin{figure}[!b]
+  \centering
+  \includesvg[width=210pt]{Network_Diagram.svg}
+  %\includesvg[width=270pt]{Network_Diagram_Horizontal.svg}
+  \caption{Network Architecture Diagram, showing input dimensions}
+  \label{diagram}
+\end{figure}
 
-% inserts equation
+Finally, three fully-connected (linear) layers map their neurons to activations from previous layers, combining the features learnt in those layers to classify images in the last fully-connected layer \cite{matlab}, with dimensions (1 x 10) from the input dimensions (32 x 32 x 3). This means that from the 32x32 training images with 3 channels (RGB), a final layer has been produced with a number of neurons equal to the number of possible classes. Each neuron in that layer is computed as the weighted sum of the previous neurons plus an additional bias to denote how likely a neuron is to be active (this is computed at each fully-connected layer):
+
 \begin{equation*}
     A = W^Tx + W_{0}
 \end{equation*}
 
-The neuron with the largest activation in this final layer corresponds to the predicted image class, which results in a one-hot encoded row in the tensor. This is repeated for each of the sixty-four items in the batch, hence the (64 x 10) final output dimensions.
+The neuron with the largest activation in this final layer corresponds to the predicted image class, which results in a one-hot encoded row in the tensor. This is repeated for each of the sixty-four items in the batch, hence the (64 x 10) final output dimensions. Refer to Figure 1 for detailed Network Architecture.
 
 The loss for each prediction is calculated using the  Cross Entropy Loss function for multiple classes, otherwise known as Negative Log Likelihood Loss:
-% inserts equation
 \begin{equation*}
     L_{NLL}(g, y) = -(y log(g) + (1 - y) log(1 - g))
 \end{equation*}
+
 Where g is the prediction and y is the correct label. This loss is calculated and the necessary adjustments to the weights are propagated backwards and averaged over the training set. The resulting vector of averaged adjustments to each weight is proportional to the negative gradient of the cost function \cite{3b1b}. This information is then used to calculate the minimum cost using Stochastic Gradient Descent as the optimiser. SGD is used instead of Gradient Descent as it can be performed over mini-batches to reduce computation time. Furthermore, it arguably leads to a more accurate model when performed over enough epochs when compared to alternatives such as ADAM \cite{cifar10}.
-
-
-\section{Network Architecture} 
-Our network architecture is shown in Figure~\ref{diagram}
-\begin{figure}[!h]
-  \centering
-  %\includesvg{Network_Diagram.svg}
-  \includesvg[width=155pt]{Network_Diagram.svg}
-  \caption{Network Architecture Diagram, showing input dimensions}
-  \label{diagram}
-\end{figure}
 
 
 \section{Results and Evaluation}
 By training our neural network over 7000 epochs (17 hours), we managed to produce a 8.51\% test error for the given dataset, which our team decided was satisfactory. Running the code for 1000 epochs (2.5 hours) produced a test error of 8.65\%, only 0.15\% better than the previous result, leading us to believe that we have reached a plateau value and running the code for longer without additional changes is not necessary. The classification test error was calculated by checking the percentage of incorrect guesses from all 10000 test images.
 
-\begin{table}[!h]
+\begin{table}[!hbt]
 \centering
 \caption{Table of Parameters}
 \label{table:1}
@@ -122,10 +118,10 @@ Our main evaluation metric was said test error. It gave us an easy way to see th
 
 While we started out with SGD, we experimented with using another optimizer, ADAM, instead. It worked very fast, producing $\approx$80\% accuracy within only 10 epochs. While we were impressed with ADAM achieving that number in such a small time, we realised that it also meant a quick plateau and not much improvement from there, as 80 epochs only improved our accuracy by $\approx$1\%. As we were not under time pressure, having 24h to run our code, we went back to SGD as that could produce a higher number, albeit taking more epochs to train. We also experimented with batch size, trying out 32, 64 and 128, settling on 64. While 128 sped up the computation of each epoch, 64 led to a slight increase in accuracy. Testing batch size 32 slowed the process with no further improvement. With convolutional layers, we started off with two, but ended up using six as that seemed to produce the best results. We also used padding on these layers.
 
-As only one member of our team owns a GPU capable of running the code at an adequate pace (Nvidia RTX 3060 TI), we decided on using Google Colab as an environment. This allows every member to write and execute the code. We used GitHub for version control. 
+As only one member of our team owns a GPU capable of running the code at an adequate pace (Nvidia RTX 3060 TI), we decided on using Google Colaboratory as an environment. This allows every member to write and execute the code. We used GitHub for version control. 
 
 \section{Conclusion and Further Work}
-Our model performed well, with 91.49\% accuracy over 7000 epochs. Consequently, we believe our architecture is a good choice, but can still be further improved. We were able to create a good model quickly using the Adam optimiser, but struggled to improve our model until we reverted to SGD, which allow to improve our model. We had attempted to use a scheduler to adjust the learning rate, however after encountering some trouble opted not to. In the future we would like to correctly implement the use of a scheduler to take advantage of the benefits of changing the learning rate. We would also like to look into the AdaBound optimiser, which claims to have the benefits of both SGD and Adam, which could help us improve our model further.
+Our model performed well, with only 8.51\% error over 7000 epochs. Consequently, we believe our architecture is a good choice, but can still be further improved. We were able to create a good model quickly using the Adam optimiser, but struggled to improve our model until we reverted to SGD, which allowed us to improve our model. We did attempt to use a scheduler to adjust the learning rate, however after encountering some trouble, opted not to. In the future we would like to correctly implement a scheduler to take advantage of a variable learning rate. We would also like to look into the AdaBound optimiser, which claims to have the benefits of both SGD and Adam, which could help us improve our model further.
 
 
 \ifCLASSOPTIONcaptionsoff
